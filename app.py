@@ -13,7 +13,7 @@ headers = {
 def is_request_valid(request):
     is_token_valid = request.form['token'] == os.environ['token']
     is_team_id_valid = request.form['team_id'] == os.environ['team']
-
+    
     return is_token_valid and is_team_id_valid
 
 @app.route('/dadjoke', methods=['POST'])
