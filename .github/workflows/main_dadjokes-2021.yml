@@ -32,4 +32,4 @@ jobs:
       with:
         app-name: 'dadjokes-2021'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_fff69c5a54db45748763ee2090077feb }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_bb38641e58dc4686870490a7d04b2a67 }}
