@@ -32,3 +32,7 @@ def dadjoke():
         response_type='in_channel',
         text=resp
     )
+
+@app.route('/', methods=['GET'])
+def slash():
+    return "What are you doing here?"
