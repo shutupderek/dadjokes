@@ -35,4 +35,4 @@ def dadjoke():
 
 @app.route('/', methods=['GET'])
 def slash():
-    return "<html><a href="https://github.com/linkages/dadjokes">Dad jokes repo</a></html>"
+    return "<html><a href=\"https://github.com/linkages/dadjokes\">Dad jokes repo</a></html>"
