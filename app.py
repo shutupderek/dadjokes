@@ -6,6 +6,10 @@ import random
 from flask import abort, Flask, jsonify, request
 from pornhub_api import PornhubApi
 
+from slack_blockkit.composition_object import TextObject
+from slack_blockkit.layout_block import DividerBlock, ImageBlock
+from slack_blockkit.utils import get_blocks
+
 app = Flask(__name__)
 url="https://icanhazdadjoke.com/"
 headers = {
@@ -59,6 +63,9 @@ def phub():
     else:
         resp = "No response"
 
+    debug = jsonify(response_type='in_channel', text=resp)
+    print(debug)
+        
     return jsonify(
         response_type='in_channel',
         text=resp
