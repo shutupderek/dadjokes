@@ -47,7 +47,7 @@ def phub():
     if request.form['text'] is not None:
         search=request.form['text']
     else:
-        search="booty"
+        search="boobs"
 
     results = api.search.search(q=search, ordering="featured", thumbsize="large_hd")
     vid = random.choice(results.videos)
