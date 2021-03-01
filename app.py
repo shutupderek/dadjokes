@@ -3,12 +3,8 @@ import requests
 import json
 import random
 
-from flask import abort, Flask, jsonify, request
+from flask import abort, Flask, jsonify, request, json, render_template, Response, make_response
 from pornhub_api import PornhubApi
-
-from slack_blockkit.composition_object import TextObject
-from slack_blockkit.layout_block import DividerBlock, ImageBlock
-from slack_blockkit.utils import get_blocks
 
 app = Flask(__name__)
 url="https://icanhazdadjoke.com/"
@@ -20,7 +16,7 @@ def is_request_valid(request):
     is_token_valid = request.form['token'] == os.environ['token']
     is_team_id_valid = request.form['team_id'] == os.environ['team']
 
-    print(request.form)
+#    print(request.form)
     
     return is_token_valid and is_team_id_valid
 
@@ -51,25 +47,57 @@ def phub():
     if request.form['text'] is not None:
         search=request.form['text']
     else:
-        search="boobs"
+        search="tits"
 
     results = api.search.search(q=search, ordering="featured", thumbsize="large_hd")
     vid = random.choice(results.videos)
     thumbnail = random.choice(vid.thumbs)
 
+    # If we got back both the title, image url, and video url, then we are good to go
     if vid is not None:
         if vid.title is not None and thumbnail.src is not None and vid.url is not None:
-            resp = "{title} | {link} | {thumbnail}".format(title=vid.title, link=vid.url, thumbnail=thumbnail.src)
+            resp = True
     else:
-        resp = "No response"
+        resp = False
 
-    debug = jsonify(response_type='in_channel', text=resp)
-    print(debug)
-        
-    return jsonify(
-        response_type='in_channel',
-        text=resp
-    )
+    # If the response was valid then create an slack block API response with the image, title, and a link to the video
+    if resp is True:
+        rDict = {
+            "blocks": [
+                {
+                    "type": "image",
+                    "image_url": str(thumbnail.src),
+                    "alt_text": vid.title
+                },
+                {
+                    "type": "context",
+                    "elements": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "{title} | {url}".format(title=vid.title, url=str(vid.url))
+                        }
+                    ]
+                }
+            ],
+            "response_type": "in_channel"
+        }
+    # otherwise respond with an error message
+    else:
+        rDict = {
+            "blocks": [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Something went wrong!"
+                    }
+                }
+            ]
+        }
+
+#    print("test: [{}]".format(rDict))
+    
+    return rDict
 
 @app.route('/', methods=['GET'])
 def slash():
