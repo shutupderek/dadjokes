@@ -13,8 +13,8 @@ headers = {
 }
 
 def is_request_valid(request):
-    is_token_valid = request.form['token'] == os.environ['token']
-    is_team_id_valid = request.form['team_id'] == os.environ['team']
+    is_token_valid = request.form['token'] in os.environ['token'].split(',')
+    is_team_id_valid = request.form['team_id'] in os.environ['team'].split(',')
 
 #    print(request.form)
     
