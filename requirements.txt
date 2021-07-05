@@ -1,3 +1,5 @@
 Flask
 requests
 pornhub_api
+Flask-APScheduler
+Flask-Caching
