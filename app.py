@@ -19,8 +19,8 @@ timeframe = 'all' #hour, day, week, month, year, all
 listing = 'new' # controversial, best, hot, new, random, rising, top
 postToken = os.environ['buildapc_postToken']
 debug = os.environ['debug']
+print(f'Debug: {debug}\nToken: {postToken}')
 slack_url = "https://hooks.slack.com/services/" + postToken
-#print(f'Debug: {debug}\nToken: {postToken}\nURL: {slack_url}')
 app = Flask(__name__)
 
 # initialize and start the flask app scheduler
