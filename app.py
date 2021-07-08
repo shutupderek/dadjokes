@@ -17,9 +17,10 @@ subreddit = 'buildapcsales'
 limit = 5
 timeframe = 'all' #hour, day, week, month, year, all
 listing = 'new' # controversial, best, hot, new, random, rising, top
-postToken = os.environ['buildapc_postToken'].split(',')[0]
-slack_url = "https://hooks.slack.com/services/" + postToken
+postToken = os.environ['buildapc_postToken']
 debug = os.environ['debug']
+print(f'Debug: {debug}\nTocken: {postToken}')
+slack_url = "https://hooks.slack.com/services/" + postToken
 
 app = Flask(__name__)
 
