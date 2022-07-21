@@ -20,7 +20,7 @@ postTokens = {}
 
 for subreddit in subreddits:
     postTokens[subreddit] = os.environ["postToken_" + subreddit]
-    slack_urls[subreddit] = "https://hooks.slack.com/services/" + postToken[subreddit]
+    slack_urls[subreddit] = "https://hooks.slack.com/services/" + postTokens[subreddit]
 
 limit = 5
 timeframe = 'all' #hour, day, week, month, year, all
