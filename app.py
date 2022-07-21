@@ -239,26 +239,26 @@ def reddit():
         # make a request to reddit to get the lastest items
         new_request = get_reddit(subreddit,listing,limit,timeframe)
         if debug == "1":
-            print("Newist list is:")
+            print("Newist list is for [" + subreddit + "]: ")
             simple_print(new_request)
     
         # Calculate the difference between the new request and the latest cache list
         difference = diff(current=latest_list, new=new_request)
     
         if debug == "1":
-            print("Difference is:")
+            print("Difference for [" + subreddit + "]:")
             simple_print(difference)
             print("")
 
         # If the size of the difference dict is zero then nothing changed since we last checked
         # lets just remove the cache entry and refresh it
         if len(difference) == 0:
-            print("Nothing new to post")
+            print("Nothing new to post for [" + subreddit + "]")
             cache.delete(subreddit)
             cache.set(subreddit, new_request, timeout=0)
         else:
             # Something is different
-            print("Found some new stuff and updating the cache")
+            print("Found some new stuff and updating the cache for [" + subreddit + "]")
             # set the local latest_list to the new items
             latest_list = new_request
             # delete the cache
