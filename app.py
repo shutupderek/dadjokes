@@ -14,15 +14,20 @@ headers = {
 }
 
 subreddits = ["buildapcsales", "freegamestuff"]
+
+slack_urls = {}
+postTokens = {}
+
+for subreddit in subreddits:
+    postTokens[subreddit] = os.environ["postToken_" + subreddit]
+    slack_urls[subreddit] = "https://hooks.slack.com/services/" + postToken[subreddit]
+
 limit = 5
 timeframe = 'all' #hour, day, week, month, year, all
 listing = 'new' # controversial, best, hot, new, random, rising, top
-postToken_buildapc = os.environ['postToken_buildapc']
-postToken_freegamestuff = os.environ['postToken_freegamestuff']
+
 debug = os.environ['debug']
 #print(f'Debug: {debug}\nToken: {postToken}')
-slack_urls = {"buildapcsales": "https://hooks.slack.com/services/" + postToken_buildapc,
-              "freegamestuff": "https://hooks.slack.com/services/" + postToken_freegamestuff}
 app = Flask(__name__)
 
 # initialize and start the flask app scheduler
