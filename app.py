@@ -72,7 +72,10 @@ def get_reddit(subreddit,listing,limit,timeframe):
         title = post['data']['title']
         id = post['data']['id'].strip()
         url = post['data']['url']
-        flair = post['data']['link_flair_richtext'][0]['t']
+        if len(post['data']['link_flair_richtext']) == 0:
+            flair = ""
+        else:
+            flair = post['data']['link_flair_richtext'][0]['t']
 
         # if the post is considered expired or is a meta post, skip it
         if flair.strip().lower() == "expired" or flair.strip().lower() == "meta":
