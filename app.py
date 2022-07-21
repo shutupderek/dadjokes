@@ -13,14 +13,16 @@ headers = {
     "Accept": "application/json"
 }
 
-subreddit = 'buildapcsales'
+subreddits = ["buildapcsales", "freegamestuff"]
 limit = 5
 timeframe = 'all' #hour, day, week, month, year, all
 listing = 'new' # controversial, best, hot, new, random, rising, top
-postToken = os.environ['buildapc_postToken']
+postToken_buildapc = os.environ['postToken_buildapc']
+postToken_freegamestuff = os.environ['postToken_freegamestuff']
 debug = os.environ['debug']
 #print(f'Debug: {debug}\nToken: {postToken}')
-slack_url = "https://hooks.slack.com/services/" + postToken
+slack_urls = {"buildapcsales": "https://hooks.slack.com/services/" + postToken_buildapc,
+              "freegamestuff": "https://hooks.slack.com/services/" + postToken_freegamestuff}
 app = Flask(__name__)
 
 # initialize and start the flask app scheduler
@@ -40,6 +42,9 @@ cache.init_app(app=app, config=cacheConfig)
 # put an emptyList in the cache entry named "latest_list"
 emptyList = {}
 cache.set("latest_list", emptyList, timeout=0)
+
+for item in subreddits:
+    cache.set(item, emptyList, timeout=0)
 
 # get a reddit post from a subreddit and return a dict indexed on id with:
 #   title
@@ -223,44 +228,45 @@ def slash():
 
 @scheduler.task('interval', id='reddit', seconds=120, misfire_grace_time=900)
 def reddit():
-    # get the latest list from the cache
-    latest_list = cache.get("latest_list")
-    # make a request to reddit to get the lastest items
-    new_request = get_reddit(subreddit,listing,limit,timeframe)
-    if debug == "1":
-        print("Newist list is:")
-        simple_print(new_request)
+    for subreddit in subreddits:
+        # get the latest list from the cache
+        latest_list = cache.get(subreddit)
+        # make a request to reddit to get the lastest items
+        new_request = get_reddit(subreddit,listing,limit,timeframe)
+        if debug == "1":
+            print("Newist list is:")
+            simple_print(new_request)
     
-    # Calculate the difference between the new request and the latest cache list
-    difference = diff(current=latest_list, new=new_request)
+        # Calculate the difference between the new request and the latest cache list
+        difference = diff(current=latest_list, new=new_request)
     
-    if debug == "1":
-        print("Difference is:")
-        simple_print(difference)
-        print("")
+        if debug == "1":
+            print("Difference is:")
+            simple_print(difference)
+            print("")
 
-    # If the size of the difference dict is zero then nothing changed since we last checked
-    # lets just remove the cache entry and refresh it
-    if len(difference) == 0:
-        print("Nothing new to post")
-        cache.delete("latest_list")
-        cache.set("latest_list", new_request, timeout=0)
-    else:
-        # Something is different
-        print("Found some new stuff and updating the cache")
-        # set the local latest_list to the new items
-        latest_list = new_request
-        # delete the cache
-        cache.delete("latest_list")
-        # update the cache
-        cache.set("latest_list", latest_list, timeout=0)
-        #print("Would post the following:")
-        #simple_print(latest_list)
-        #print("")
-        # create a slack block post dict using just the differences
-        post = format_post(difference)
-        # print(post)
-        # Set appropriate headers and post to slack
-        headers = {'Content-type': 'application/json'}
-        response = requests.post(slack_url, headers=headers, data=json.dumps(post))
-        #print(response)
+        # If the size of the difference dict is zero then nothing changed since we last checked
+        # lets just remove the cache entry and refresh it
+        if len(difference) == 0:
+            print("Nothing new to post")
+            cache.delete(subreddit)
+            cache.set(subreddit, new_request, timeout=0)
+        else:
+            # Something is different
+            print("Found some new stuff and updating the cache")
+            # set the local latest_list to the new items
+            latest_list = new_request
+            # delete the cache
+            cache.delete(subreddit)
+            # update the cache
+            cache.set(subreddit, latest_list, timeout=0)
+            #print("Would post the following:")
+            #simple_print(latest_list)
+            #print("")
+            # create a slack block post dict using just the differences
+            post = format_post(difference)
+            # print(post)
+            # Set appropriate headers and post to slack
+            headers = {'Content-type': 'application/json'}
+            response = requests.post(slack_urls[subreddit], headers=headers, data=json.dumps(post))
+            #print(response)
