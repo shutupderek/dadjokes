@@ -182,7 +182,7 @@ def aidream():
 
     equery = urllib.parse.quote(query)
     imageurl = "https://api.computerender.com/generate/{equery}".format(equery=equery)
-    markdown = "<{imageurl}}|{query}>".format(imageurl=imageurl, query=query)
+    markdown = "<{imageurl}|{query}>".format(imageurl=imageurl, query=query)
 
     if debug:
         print("DEBUG: requesting the following URL: [{query}]".format(query=urllib.parse.quote(query)))
