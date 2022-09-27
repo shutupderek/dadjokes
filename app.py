@@ -181,7 +181,8 @@ def aidream():
         query="I dream of androids"
 
     equery = urllib.parse.quote(query)
-    markdown = "<https://api.computerender.com/generate/{equery}|{query}>".format(equery=urllib.parse.quote(query), query=query)
+    imageurl = "https://api.computerender.com/generate/{equery}".format(equery=equery)
+    markdown = "<{imageurl}}|{query}>".format(imageurl=imageurl, query=query)
 
     if debug:
         print("DEBUG: requesting the following URL: [{query}]".format(query=urllib.parse.quote(query)))
@@ -190,7 +191,7 @@ def aidream():
         "blocks": [
             {
                 "type": "image",
-                "image_url": str(equery),
+                "image_url": str(imageurl),
                 "alt_text": str(query)
             },
             {
