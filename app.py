@@ -181,7 +181,7 @@ def aidream():
         query="I dream of androids"
 
     if debug:
-        print("DEBUG: requesting the following URL: [{query}]".format(query=query))
+        print("DEBUG: requesting the following URL: [{query}]".format(query=urllib.parse.quote(query)))
 
     rDict = {
         "blocks": [
@@ -193,6 +193,9 @@ def aidream():
         ],
         "response_type": "in_channel"
     }
+
+    if debug:
+        print("DEBUG: {rDict}".format(rDict=rDict))
 
     return rDict
 
