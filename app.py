@@ -184,7 +184,7 @@ def aidream():
         "blocks": [
             {
                 "type": "image",
-                "image_url": "https://api.computerender.com/generate/" + urllib.parse.quote(query)
+                "image_url": "https://api.computerender.com/generate/" + urllib.parse.quote(query),
                 "alt_text": str(query)
             }
         ],
