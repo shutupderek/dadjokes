@@ -1,7 +1,9 @@
+from crypt import methods
 import os
 import requests
 import json
 import random
+import urllib.parse
 
 from flask import abort, Flask, config, jsonify, request, json, render_template, Response, make_response, g
 from flask_apscheduler import APScheduler
@@ -163,6 +165,23 @@ def dadjoke():
     else:
         resp = "Something went wrong!"
         
+    return jsonify(
+        response_type='in_channel',
+        text=resp
+    )
+
+@app.route('/aidream', methods=['POST'])
+def dadjoke():
+    if not is_request_valid(request):
+        abort(400)
+
+    r = requests.get(url=url, headers=headers)
+
+    if ( r.status_code == 200 ):
+        resp = r.json()['joke']
+    else:
+        resp = "Something went wrong!"
+
     return jsonify(
         response_type='in_channel',
         text=resp
