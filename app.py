@@ -175,17 +175,23 @@ def aidream():
     if not is_request_valid(request):
         abort(400)
 
-    r = requests.get(url=url, headers=headers)
-
-    if ( r.status_code == 200 ):
-        resp = r.json()['joke']
+    if request.form['text'] is not None:
+        query=request.form['text']
     else:
-        resp = "Something went wrong!"
+        query="I dream of androids"
 
-    return jsonify(
-        response_type='in_channel',
-        text=resp
-    )
+    rDict = {
+        "blocks": [
+            {
+                "type": "image",
+                "image_url": "https://api.computerender.com/generate/" + urllib.parse.quote(query)
+                "alt_text": str(query)
+            }
+        ],
+        "response_type": "in_channel"
+    }
+
+    return rDict
 
 @app.route('/nsfp', methods=['POST'])
 def phub():
