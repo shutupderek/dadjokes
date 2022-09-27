@@ -29,7 +29,7 @@ timeframe = 'all' #hour, day, week, month, year, all
 listing = 'new' # controversial, best, hot, new, random, rising, top
 
 debug = os.environ['debug']
-#print(f'Debug: {debug}\nToken: {postToken}')
+#print(f'Debug: {debug}\nToken: {postTokens}')
 app = Flask(__name__)
 
 # initialize and start the flask app scheduler
