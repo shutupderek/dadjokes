@@ -181,7 +181,7 @@ def aidream():
         query="I dream of androids"
 
     if debug:
-        print("DEBUG: requesting the following URL: [{qurey}]".format(query=query))
+        print("DEBUG: requesting the following URL: [{query}]".format(query=query))
 
     rDict = {
         "blocks": [
