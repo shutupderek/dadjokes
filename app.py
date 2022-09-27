@@ -171,7 +171,7 @@ def dadjoke():
     )
 
 @app.route('/aidream', methods=['POST'])
-def dadjoke():
+def aidream():
     if not is_request_valid(request):
         abort(400)
 
