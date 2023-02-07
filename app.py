@@ -41,7 +41,7 @@ scheduler.start()
 cacheConfig = {
     "CACHE_TYPE": "FileSystemCache",
     "CACHE_DEFAULT_TIMEOUT": 3600,
-    "CACHE_DIR": "/pickles"
+    "CACHE_DIR": "/tmp"
 }
 cache = Cache()
 cache.init_app(app=app, config=cacheConfig)
