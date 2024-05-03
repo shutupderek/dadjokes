@@ -57,6 +57,10 @@ for item in subreddits:
 #   title
 #   url
 #   flair
+# if the url is blacklisted, yeet it.
+
+blacklisted_urls = ["microcenter.com", "bestkorea.kp"]
+
 def get_reddit(subreddit,listing,limit,timeframe):
     response = {}
 
@@ -74,6 +78,11 @@ def get_reddit(subreddit,listing,limit,timeframe):
         title = post['data']['title']
         id = post['data']['id'].strip()
         url = post['data']['url']
+        
+        # check if the post URL is blacklisted
+        if any(blacklisted in url for blacklisted in blacklisted_urls):
+            continue  # bye felicia
+
         if len(post['data']['link_flair_richtext']) == 0:
             flair = ""
         else:
